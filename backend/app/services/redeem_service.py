@@ -21,15 +21,8 @@ def preview(business_day: str | None = None) -> dict[str, Any]:
     conn = connect()
     try:
         day = business_day or settings_repo.get(conn, "business_day")
-        opens = fact_repo.open_facts_for_day(conn, day)
-        total = round(sum(float(f["amount"]) for f in opens), 2)
-        return {
-            "business_day": day,
-            "open_count": len(opens),
-            "open_total": total,
-            "already_sealed": fact_repo.day_is_sealed(conn, day),
-            "facts": opens,
-        }
+        # 与重放任务共用同一快照函数：事件扫描、事实读、互证逻辑同源
+        return fact_repo.build_day_snapshot(conn, day)
     finally:
         conn.close()
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Any
 from fastapi import APIRouter, Query
 from app.services import redeem_service as svc
+from app.services import replay_service
 
 router = APIRouter(tags=["redeem"])
 
@@ -14,6 +15,11 @@ def facts(business_day: str | None = Query(None)):
 @router.get("/redeem/preview")
 def preview(business_day: str | None = Query(None)):
     return svc.preview(business_day)
+
+
+@router.post("/redeem/replay")
+def replay(body: dict[str, Any] | None = None):
+    return replay_service.replay_day((body or {}).get("business_day"))
 
 
 @router.post("/redeem/seal")

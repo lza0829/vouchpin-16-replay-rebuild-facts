@@ -20,6 +20,7 @@ export const api = {
   addEvent: (body) => req('/events', { method: 'POST', body: JSON.stringify(body) }),
   facts: (day) => req('/facts' + (day ? `?business_day=${encodeURIComponent(day)}` : '')),
   preview: (day) => req('/redeem/preview' + (day ? `?business_day=${encodeURIComponent(day)}` : '')),
+  replay: (body) => req('/redeem/replay', { method: 'POST', body: JSON.stringify(body || {}) }),
   seal: (body) => req('/redeem/seal', { method: 'POST', body: JSON.stringify(body) }),
   batches: () => req('/batches'),
   getDay: () => req('/settings/day'),
